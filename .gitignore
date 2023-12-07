@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+
+# TypeScript build output
+dist/
+
+# Visual Studio Code
+.vscode/
+
+# npm package files
+package-lock.json
+npm-debug.log
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
