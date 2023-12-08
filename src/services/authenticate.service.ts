@@ -1,3 +1,4 @@
+import dotenv from "dotenv"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { RowDataPacket } from "mysql2";
@@ -5,6 +6,8 @@ import { RowDataPacket } from "mysql2";
 import { secret_config } from "../configs/app.config";
 // Services //
 import { database_query } from "./database.service";
+
+dotenv.config();
 
 export const login = (email: string, password: string) => {
   return new Promise((resolve, reject) => {

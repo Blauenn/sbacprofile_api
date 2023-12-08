@@ -1,9 +1,9 @@
 import { Router } from "express";
 // Controllers //
-import { onGetImage } from "../../controllers/image.controller";
+import { image_onGetImage } from "../../controllers/image.controller";
 
 const router = Router();
 
-router.get("/getImage", onGetImage);
+router.get("/getImage", image_onGetImage);
 
 export default router;

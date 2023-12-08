@@ -3,7 +3,10 @@ import { RowDataPacket } from "mysql2";
 // Services //
 import { getImage } from "../services/image.service";
 
-export const onGetImage = async (request: Request, response: Response) => {
+export const image_onGetImage = async (
+  request: Request,
+  response: Response
+) => {
   if (!request.user?.user_role || !request.user?.user_role_ID) {
     return response.send({
       status: false,

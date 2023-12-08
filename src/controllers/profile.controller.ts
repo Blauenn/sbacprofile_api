@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 // Services //
-import { student_getOne } from "../services/student.service";
+import { student_getOne } from "../services/profiles/student.service";
+import { teacher_getOne } from "../services/profiles/teacher.service";
 
-export const onGetOneProfile = async (request: Request, response: Response) => {
+export const profile_onGetOneProfile = async (
+  request: Request,
+  response: Response
+) => {
   const { user_role, user_role_ID } = request.user || {};
 
   if (!user_role || !user_role_ID) {
@@ -12,7 +16,7 @@ export const onGetOneProfile = async (request: Request, response: Response) => {
     });
   }
 
-  let result;
+  let result: any;
   switch (user_role) {
     case 1:
       result = await student_getOne(user_role_ID);
@@ -27,7 +31,7 @@ export const onGetOneProfile = async (request: Request, response: Response) => {
       });
   }
 
-  if (!result || result.length === 0) {
+  if (!result || (result as any[]).length === 0) {
     return response.send({
       status: false,
       result: "Profile not found!",

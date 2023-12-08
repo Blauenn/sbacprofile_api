@@ -1,9 +1,9 @@
 import { Router } from "express";
 // Controllers //
-import { onGetOneProfile } from "../../controllers/profile.controller";
+import { profile_onGetOneProfile } from "../../controllers/profile.controller";
 
 const router = Router();
 
-router.get("/getProfile", onGetOneProfile);
+router.get("/getProfile", profile_onGetOneProfile);
 
 export default router;

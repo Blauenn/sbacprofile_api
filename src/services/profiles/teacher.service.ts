@@ -1,24 +1,31 @@
 import dotenv from "dotenv";
 import { RowDataPacket } from "mysql2";
 // Services //
-import { database_query } from "./database.service";
+import { database_query } from "../database.service";
+// Constants //
+import {
+  teacher_primary_columns,
+  teacher_names_columns,
+  teacher_basic_columns,
+  teacher_contacts_columns,
+} from "../../constants/teacher.constant";
+
+const allColumns = teacher_primary_columns.concat(
+  teacher_names_columns,
+  teacher_basic_columns,
+  teacher_contacts_columns
+);
 
 dotenv.config();
 
-const allColumns = student_primary_columns.concat(
-  student_names_columns,
-  student_basic_columns,
-  student_contacts_columns
-);
-
 // Get all //
-export const student_getAll = () => {
+export const teacher_getAll = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let columns = ["primary_student_ID", ...allColumns];
+      const column = ["primary_teacher_ID", ...allColumns];
 
       const result = await database_query(
-        `SELECT ${columns.join(", ")} FROM ${process.env.DB_TABLE_STUDENT}`
+        `SELECT ${column.join(", ")} FROM ${process.env.DB_TABLE_TEACHER}`
       );
       resolve(result);
     } catch (error) {
@@ -27,15 +34,15 @@ export const student_getAll = () => {
   });
 };
 // Get one //
-export const student_getOne = (id: number | {}) => {
+export const teacher_getOne = (teacher_ID: number | {}) => {
   return new Promise(async (resolve, reject) => {
     try {
-      let columns = ["primary_student_ID", ...allColumns];
+      const column = ["primary_teacher_ID", ...allColumns];
 
       const result = await database_query(
-        `SELECT ${columns.join(", ")} FROM ${
-          process.env.DB_TABLE_STUDENT
-        } WHERE student_ID = ${id}`
+        `SELECT ${column.join(", ")} FROM ${
+          process.env.DB_TABLE_TEACHER
+        } WHERE teacher_ID = ${teacher_ID}`
       );
       resolve(result);
     } catch (error) {
@@ -45,10 +52,10 @@ export const student_getOne = (id: number | {}) => {
 };
 
 // Create //
-export const student_createOne = (object: any) => {
+export const teacher_createOne = (object: any) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const columns = allColumns;
+      let columns = allColumns;
 
       const row = columns.map((element) => {
         if (object[element] == null) {
@@ -57,25 +64,25 @@ export const student_createOne = (object: any) => {
         return object[element];
       });
 
-      const email = object["student_email"];
+      const email = object["teacher_email"];
       const emailIsValid =
         (
           (await database_query(
-            `SELECT student_email FROM ${process.env.DB_TABLE_STUDENT} WHERE student_email = ?`,
+            `SELECT teacher_email FROM ${process.env.DB_TABLE_TEACHER} WHERE teacher_email = ?`,
             [email]
           )) as RowDataPacket[]
         ).length === 0;
 
       if (emailIsValid) {
         const result = await database_query(
-          `INSERT INTO ${process.env.DB_TABLE_STUDENT} (${columns.join(
+          `INSERT INTO ${process.env.DB_TABLE_TEACHER} (${columns.join(
             ", "
           )}) VALUES (${columns.map(() => "?").join(", ")})`,
           row
         );
         resolve(result);
       } else {
-        reject("That email is already in use.");
+        reject("That email is already in use");
       }
     } catch (error) {
       reject(error);
@@ -83,7 +90,8 @@ export const student_createOne = (object: any) => {
   });
 };
 
-export const student_updateOne = (id: number, object: any) => {
+// Update //
+export const teacher_updateOne = (primary_teacher_ID: number, object: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       let allowedColumns = allColumns;
@@ -104,8 +112,8 @@ export const student_updateOne = (id: number, object: any) => {
 
       const updateColumns = columns.join(", ");
       const result = await database_query(
-        `UPDATE ${process.env.DB_TABLE_STUDENT} SET ${updateColumns} WHERE primary_student_ID = ?`,
-        [...values, id]
+        `UPDATE ${process.env.DB_TABLE_TEACHER} SET ${updateColumns} WHERE primary_teacher_ID = ?`,
+        [...values, primary_teacher_ID]
       );
       resolve(result);
     } catch (error) {
@@ -114,12 +122,13 @@ export const student_updateOne = (id: number, object: any) => {
   });
 };
 
-export const student_deleteOne = (id: number) => {
+// Delete //
+export const teacher_deleteOne = (primary_teacher_ID: number) => {
   return new Promise(async (resolve, reject) => {
     try {
       const result = await database_query(
-        `DELETE FROM ${process.env.DB_TABLE_STUDENT} WHERE primary_student_ID = ?`,
-        [id]
+        `DELETE FROM ${process.env.DB_TABLE_TEACHER} WHERE primary_teacher_ID = ?`,
+        [primary_teacher_ID]
       );
       resolve(result);
     } catch (error) {

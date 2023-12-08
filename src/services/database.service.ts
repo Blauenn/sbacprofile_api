@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import mysql from "mysql2/promise";
 // Configs //
 import { database_config } from "../configs/database.config";
+
+dotenv.config();
 
 export const database_query = async (
   sql: string,

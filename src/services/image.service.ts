@@ -1,5 +1,6 @@
-import { database_query } from "./database.service";
 import dotenv from "dotenv";
+// Services //
+import { database_query } from "./database.service";
 
 dotenv.config();
 
